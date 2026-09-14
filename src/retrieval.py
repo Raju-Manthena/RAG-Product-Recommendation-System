@@ -118,11 +118,13 @@ class HybridRetriever:
         # Product lookup
         # -------------------------------------------------------------
 
-        self.product_lookup = (
-            self.products
-            .set_index("parent_asin")
-            .to_dict(orient="index")
-        )
+        #self.product_lookup = (
+        #    self.products
+        #    .set_index("parent_asin")
+        #   .to_dict(orient="index")
+        #)
+
+        print("DEBUG: Skipping product lookup construction...", flush=True)
 
         print("Hybrid retriever ready.")
 
