@@ -22,8 +22,16 @@ st.set_page_config(
 
 @st.cache_resource
 def load_system():
+
+    st.write("DEBUG: Starting system load")
+
+    st.write("DEBUG: Loading retriever...")
     retriever = HybridRetriever()
+    st.write("DEBUG: Retriever loaded")
+
+    st.write("DEBUG: Loading Gemini...")
     generator = GeminiGenerator()
+    st.write("DEBUG: Gemini loaded")
 
     return retriever, generator
 
