@@ -23,6 +23,21 @@ FINAL_TOP_K = 5
 
 RRF_K = 60
 
+PRODUCT_COLUMNS = [
+    "parent_asin",
+    "title",
+    "average_rating",
+    "rating_number",
+    "review_count",
+    "price",
+    "store",
+    "features",
+    "categories",
+    "description",
+    "subtitle",
+    "document"
+]
+
 
 # ---------------------------------------------------------------------
 # Tokenization
@@ -67,7 +82,8 @@ class HybridRetriever:
         print("Loading product data...")
 
         self.products = pd.read_parquet(
-            PRODUCT_FILE
+            PRODUCT_FILE,
+            columns=PRODUCT_COLUMNS
         )
 
         self.products["parent_asin"] = (
@@ -118,20 +134,16 @@ class HybridRetriever:
         # Product lookup
         # -------------------------------------------------------------
 
-        #self.product_lookup = (
-        #    self.products
-        #    .set_index("parent_asin")
-        #   .to_dict(orient="index")
-        #)
+        print("Using DataFrame-based product lookup...", flush=True)
 
-        print("DEBUG: Skipping product lookup construction...", flush=True)
+        self.products = self.products.set_index("parent_asin")
 
         print("Hybrid retriever ready.")
 
     # -----------------------------------------------------------------
     # BM25 retrieval
     # -----------------------------------------------------------------
-
+    
     def bm25_search(self, query, top_k=BM25_TOP_K):
 
         tokens = simple_tokenize(query)
@@ -236,9 +248,9 @@ class HybridRetriever:
 
         for product_id, rrf_score in ranked[:top_k]:
 
-            product = self.product_lookup.get(product_id)
-
-            if product is None:
+            try:
+                product = self.products.loc[product_id]
+            except KeyError:
                 continue
 
             results.append({
