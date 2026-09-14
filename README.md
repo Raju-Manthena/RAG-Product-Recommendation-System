@@ -10,6 +10,10 @@ The system uses a hybrid retrieval pipeline that combines BM25 keyword retrieval
 
 The application is implemented using Streamlit.
 
+## Live Demo
+
+[Open the deployed application](https://rag-appuct-recommendation-system-lmtsahyyd9yyvnwgthfbzd.streamlit.app/)
+
 ## Features
 
 - Product retrieval using BM25 keyword matching
