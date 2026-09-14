@@ -23,15 +23,15 @@ st.set_page_config(
 @st.cache_resource
 def load_system():
 
-    st.write("DEBUG: Starting system load")
+    print("DEBUG: Starting system load", flush=True)
 
-    st.write("DEBUG: Loading retriever...")
+    print("DEBUG: Loading retriever...", flush=True)
     retriever = HybridRetriever()
-    st.write("DEBUG: Retriever loaded")
+    print("DEBUG: Retriever loaded", flush=True)
 
-    st.write("DEBUG: Loading Gemini...")
+    print("DEBUG: Loading Gemini...", flush=True)
     generator = GeminiGenerator()
-    st.write("DEBUG: Gemini loaded")
+    print("DEBUG: Gemini loaded", flush=True)
 
     return retriever, generator
 
@@ -69,6 +69,7 @@ if recommend_button:
         st.stop()
 
     try:
+
         with st.spinner("Loading recommendation system..."):
             retriever, generator = load_system()
 
