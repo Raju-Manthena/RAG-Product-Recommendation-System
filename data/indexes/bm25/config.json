@@ -1,0 +1,9 @@
+{
+  "input_file": "data\\processed\\product_documents.parquet",
+  "id_column": "parent_asin",
+  "text_column": "document",
+  "num_documents": 60889,
+  "tokenizer": "simple_tokenize",
+  "stopwords": "english",
+  "bm25": "BM25Okapi"
+}

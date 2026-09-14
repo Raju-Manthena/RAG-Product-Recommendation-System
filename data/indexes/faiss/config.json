@@ -1,0 +1,14 @@
+{
+  "input_file": "data\\processed\\product_documents_final.parquet",
+  "id_column": "parent_asin",
+  "text_column": "embedding_text",
+  "model_name": "sentence-transformers/all-MiniLM-L6-v2",
+  "embedding_dimension": 384,
+  "num_documents": 60889,
+  "batch_size": 256,
+  "index_type": "IndexIVFFlat",
+  "metric": "inner_product",
+  "nlist": 256,
+  "nprobe": 32,
+  "normalized_embeddings": true
+}
