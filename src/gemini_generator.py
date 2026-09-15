@@ -1,10 +1,29 @@
 from google import genai
+from google.genai import types
+from google.genai.errors import ServerError
+from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
 
 
 class GeminiGenerator:
     def __init__(self, model_name: str = "gemini-3.6-flash"):
         self.client = genai.Client()
         self.model_name = model_name
+
+    @retry(
+        retry=retry_if_exception_type(ServerError),
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=2, max=8),
+    )
+    def _call_gemini(self, prompt):
+        return self.client.models.generate_content(
+            model=self.model_name,
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                automatic_function_calling=types.AutomaticFunctionCallingConfig(
+                    disable=True
+                )
+            )
+        )
 
     def generate(self, query: str, context: str) -> str:
 
@@ -91,9 +110,12 @@ with the user's requirements, briefly mention them under:
 Explain the reason using only retrieved evidence.
 """
 
-        response = self.client.models.generate_content(
-            model=self.model_name,
-            contents=prompt
-        )
+        try:
+            response = self._call_gemini(prompt)
+            return response.text
 
-        return response.text
+        except ServerError:
+            return (
+                "The recommendation service is temporarily busy. "
+                "Please try again in a moment."
+            )
